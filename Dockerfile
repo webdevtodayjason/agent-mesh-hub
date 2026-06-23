@@ -13,9 +13,9 @@ RUN chown mosquitto:mosquitto /mosquitto/config/passwords /mosquitto/config/acl.
 # Create persistence directory
 RUN mkdir -p /mosquitto/data && chown mosquitto:mosquitto /mosquitto/data
 
-# Healthcheck via MQTT port connectivity
-HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=10s \
-  CMD mosquitto_sub -h localhost -p 1883 -t 'healthcheck/#' -C 1 -W 3 || exit 0
+# No HEALTHCHECK — Coolify manages health status via its own checks.
+# Mosquitto doesn't speak HTTP, so HTTP-based health checks will always fail.
+# The broker is healthy if the process is running and port 1883 is listening.
 
 EXPOSE 1883 9001
 
